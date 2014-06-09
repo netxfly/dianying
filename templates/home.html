@@ -1,0 +1,28 @@
+<html> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf8" /> 
+<title> Life was like a box of chocolates, you never know what you’re gonna get.</title> 
+</head> 
+<body> 
+<center>
+
+<b>共有 {{ movies }} 部电影</b><hr>
+<b>电影分类：
+<table id='mytable' cellspacing='0' align='center' width='95%'> <tr>
+ {% for i, tag in enumerate(tags) %}
+ {% if i % 10 == 0 %}</TR><TR>{% end %}
+
+ <Td class='row' align='center'><a href="/tags/{{ escape(tag) }}" target="_blank">{{ escape(tag) }}</a><br>
+{% end %}
+</tr></table>
+<hr color='#F2FFDF'>
+<form id="login_form" action="/search" method="post">
+    输入电影名称：<input type="text" name="movie_name">
+    <input type="submit" name="login" value="搜索"><br />
+</form>
+<center></body> </html>
+
+
+
+
+

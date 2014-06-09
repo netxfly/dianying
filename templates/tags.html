@@ -1,0 +1,184 @@
+<!DOCTYPE html> 
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>dianying.at</title>
+	<link rel="stylesheet" href="{{ static_url("css/base.css") }}" type="text/css"/>
+    <link href="{{ static_url("css/webscan6.css") }}" rel="stylesheet" />
+	<link href="{{ static_url("images/favicon11.ico") }} type="image/11vnd.microsoft.icon" rel="icon">
+	<style>.header{min-width: 990px;}</style>
+</head>
+<body style="background:url('{{ static_url("images/bg.png") }}') repeat-x scroll center top transparent">
+<style>
+.my-website-user-oplist{z-index:1000;}
+.scan-info-tips{position:absolute; right:50px; top:44px; border:1px solid #bebebe; background:#fff; width:230px; z-index:100;-webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);box-shadow: 0 2px 4px rgba(0,0,0,.2);}
+.scan-info-tips li{line-height:18px; padding:5px 10px; border-top:1px dashed #E2E2E2; position:relative; margin-top:-1px; color:#333;}
+.scan-info-tips li a{color:#666; margin:0;font-size:12px;}
+.scan-info-tips li a:hover{color:#000;}
+.scan-info-tips .close-tips-btn{text-align:right;}
+.scan-info-tips .close-tips-btn a{color:#999;font-size:12px;}
+.webscan-menu li{_width: 85px;}
+/*  新加的，更多按钮   */
+#menu-more{position:relative;}
+#menu-more_a:hover{line-height:42px; padding-bottom:2px;}
+#menu-more-list{position:absolute; left:-1px; top:41px; width:130px; padding-top:1px;}
+#menu-more-list dl{background:#3764B2;border: 1px solid #31528A;border-top:1px solid #3764B2;box-shadow:0 3px 6px rgba(0, 0, 0, .25);}
+#menu-more-list dd{line-height:30px; text-align:left;}
+#menu-more-list dd a{font-size:14px; color:#fff; padding:2px 10px; display:block;}
+#menu-more-list dd a:hover{background:#32589B;}
+#menu-more-list{display:none;}
+</style>
+<div id="headerbox">
+		<div class="header"  style="min-width:980px; padding-right:0;">
+			<div class="logo"></div>
+			<div class="webscan-menu">
+				<ul>
+					<div id="menu-more-list">
+					 <dl>
+						 <dd></dd>
+						 <dd></dd>
+					 </dl>
+					</div>
+				 </li>
+				</ul>
+			</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript" src="{{ static_url("js/jquery.min.js") }}"></script>
+<!--begin tips -->
+    <script type="text/javascript">
+	function closeMessage() {
+		$.ajax({	
+			dataType:  'json',
+			url : "/index/close-message2",
+			data:"close=1",
+			type: 'POST',
+			success: function(data) {
+			   $(".mycenter-news-tips").hide();
+			}
+		});
+	}
+	</script>
+	    <script>
+	function readmessage(obj,type,itemid){
+		$.ajax({  	
+		url : "/message/close",
+		type: 'POST',
+		dataType:  'json',
+		data:"type="+type+"&itemid="+itemid,
+		success: function(data){
+			if(data.state == "yes"){
+				 location.href=obj.href;
+				 $("#message_"+itemid+"_"+type).hide();
+			}else{
+			
+			}
+		}
+		});
+	}
+	function close_user_mess() {
+		$.ajax({  	
+		url : "/message/ajaxcloseallmessage",
+		type: 'POST',
+		success: function(data){
+			$("#user_mess_tips").css("display", "none");
+		}
+		});	
+	}
+	</script>
+<!--end tips -->
+<script>
+$(function(){
+	$("#menu-more").hover(function(){
+		$("#menu-more-list").show();
+		$("#menu-more").css("background-color","#3764B2");
+		$("#menu-more").css("padding-bottom","2px");
+	},function(){
+		$("#menu-more-list").hide();
+		$("#menu-more").css("background-color","");
+		$("#menu-more").css("padding-bottom","0px");
+	})
+})
+</script>	<div style="height: 30px;line-height: 30px;background: #F9EDBE;border: 1px solid #F0C36D;text-align: center;font-size: 12px;position: relative;min-width:1024px;" id="show_box_header">重要通知：www.dianying.at于2013年8月10号隆重上线，共收录各国各大电影网站数十万部电影，请大家多来捧场看电影</div>
+ 	<script>
+	function close_show_box() {
+	$("#show_box_header").hide();
+	$.ajax({
+		url : "/index/setclosebox",
+		type: 'GET',
+		success: function(data) {
+			if (data.state == 1) {
+		  		$("#user_mess_tips  ul").prepend(data.msg);
+				$("#user_mess_tips").css("display", "block");
+				
+			}
+		}
+	}); 
+	}
+	</script>
+	<div id="mianWrap" class="wrapper clearfix">
+		<h2 id="bannerLogo">免费看电影，从这里开始<img style="position:absolute;left:644px;top:60px" src="{{ static_url("images/free.png") }}" /></h2>
+		<form id="scan"  name="movie_name" action="/search/" method="post" class="clearfix">
+			<span id="scanHttp"></span>
+				<span id="scanInput"><input id="url" name="movie_name" type="text" /></span>
+				<span id="scanSubmit" ><span id="submit"></span> <input type="image" name="login" src="{{ static_url("images/search.jpg") }}"></span>
+		</form>
+		<div id="tj" class="clearfix">
+			<p class="banner p_2"> <span id="vulnerabilitycount_id" class="num"></span> </p>
+		</div>
+		<div id="jieshao" class="clearfix">
+			<table id='mytable' cellspacing='0' align='center' width='95%'> <tr>
+				{% for movie_info in entries %}
+				{% if 'zh_title' in movie_info%}
+					<tr><td Colspan="2">电影名称：<a href="/search/{{ escape(movie_info['zh_title'])}}" target="_blank">{{ movie_info['zh_title']}}</a>
+
+						<td>{%if 'year' in movie_info.keys()%}
+							上映时间:{{movie_info['year']}}
+							{%end%}
+							<td>
+					</tr>
+					{%if 'douban_rating' in movie_info.keys() %}
+					<tr><td>
+					豆瓣评分：{{movie_info['douban_rating']}}<td><td><td>
+					</tr>
+					{%end%}
+
+					<tr>{%if 'summary' in movie_info.keys()%}
+						<td Colspan="4">剧情简介：{{movie_info['summary']}}
+						{%end%}
+					</tr>
+					{%end%}
+				{% end%}
+
+ 				
+</tr></table>
+		</div>
+<script type="text/javascript" src="{{ static_url("js/jquery.min.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("js/marqu-index.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("js/jquery.autocomplete.min.js") }}"></script>
+<link rel="stylesheet" href="{{ static_url("css/jquery.autocomplete.css") }}" type="text/css"/>
+<div id="footer">
+	<div class="wrapper clearfix">
+		<div  class="footLink f_3">
+			<h3>关于我们</h3>
+			<ul class="clearfix">
+				<li><a href="/contact">联系我们</a></li>
+				<li ><a href="/about">关于电影AT</a></li>
+			</ul>
+		</div>
+		<div  class="footLink f_4">
+			<h3>关注我们</h3>
+			<ul class="im clearfix">
+				<li class="sina"><a style="color:#247CD6" href="http://weibo.com/netxfly" target="__blank">电影AT微博</a></li>
+</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="ft" style="border-top: 1px dashed #CCC">
+		<p>Copyright&copy;2013-2013 电影AT </p>
+	</div>
+</div>
+</body>
+</html>
